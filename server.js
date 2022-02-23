@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 //Edit 2
 const connectDB = require('./config/db');
 const res = require('express/lib/response');
@@ -14,6 +15,8 @@ connectDB();
 const app = express();
 //Body parser
 app.use(express.json());
+//cookie parser
+app.use(cookieParser());
 
 app.use('/api/v1/hospitals', hospitals);
 app.use('/api/v1/auth',auth);
