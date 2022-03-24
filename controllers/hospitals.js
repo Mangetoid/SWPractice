@@ -1,7 +1,22 @@
 const { param } = require('express/lib/request');
 const { json } = require('express/lib/response');
 const Hospital = require('../Models/hospital');
+const vacCenter = require('../Models/VacCenter');
 const hospital = require('../Models/hospital');
+//@desc     Get vaccine centers
+//@route    GET/api/v1/hospitals/vacCenters
+//@acess    Public
+exports.getVacCenters = (req,res,next)=>{
+    vacCenter.getAll((err,data)=>{
+        if(err)
+        res.status(500).send({
+            message:
+            err.message || "Some error occurred while retrieving Vaccine Centers."
+        });
+        else res.send(data);
+    });
+};
+
 //Get all hospitals
 //GET /api/v1/hospitals
 //Public
