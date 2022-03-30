@@ -1,6 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss=require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 //Edit 2
 const connectDB = require('./config/db');
 const res = require('express/lib/response');
@@ -18,7 +24,25 @@ const app = express();
 app.use(express.json());
 //cookie parser
 app.use(cookieParser());
+//Sanitize data
+app.use(mongoSanitize());
+//Set security headers
+app.use(helmet());
+//Prevent XSS attacks
+app.use(xss());
+//Prevent http param pollutions
+app.use(hpp());
+//Enable CORS
+app.use(cors());
 
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowsMs:10*60*1000,//10 mins
+    max: 100
+});
+
+app.use(limiter);
 app.use('/api/v1/hospitals', hospitals);
 app.use('/api/v1/auth',auth);
 app.use('/api/v1/appointments', appointments);
